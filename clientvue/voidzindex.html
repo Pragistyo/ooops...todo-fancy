@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="/assets/bootstrap_superhero.min.css">
+    <link rel="stylesheet" href="/assets/bootsrap.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/superhero/bootstrap.min.css"> -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="/css/master.css"> -->
+    <link rel="stylesheet" type="text/css" href="/assets/style.css">
+    <title>Login</title>
+  </head>
+  <body>
+
+    <!-- VUE AREA -->
+    <div id="app">
+      <!-- FACEBOOK LOGIN AREA -->
+      <div id="fb-root" class="center">
+
+        <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+
+        <div class="pull-right">
+          <fb:login-button autologoutlink="true" v-on:click="fblogout()"></fb:login-button>
+        </div>
+
+      </div>
+
+
+      <button class="btn btn-danger center-block" name="button">Todo App</button><br>
+
+      <!-- DATA FACEBOOK AREA -->
+      <div class="">
+        <img class="img-responsive img-circle center-block" v-bind:src="profpic" alt="">
+        <div class="text-center">
+          <p></p>
+          <button class="btn btn-warning center-block" name="button">Welcome : {{username}} !</button><br>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANGULAR JS AREA -->
+    <div ng-app="TaskManager">
+      <div class="container">
+        <div class="content" ng-controller="taskController">
+          <h1>To-do List App</h1><br>
+          <p class="tagline">an angularJS & vueJS todo app</p>
+          <!-- <form> -->
+          <!-- <button type="button" name="button" class="btn btn-primary" ng-click="dataTodo()">button test</button> -->
+            <div class="inputContainer">
+              <input type="text" id="description" class="taskName" placeholder="What do you need to do?" ng-model="newTask">
+              <label for="description">Description</label>
+            </div>
+
+            <div class="inputContainer half last"> <i class="fa fa-caret-down selectArrow"></i>
+              <select id="category" class="taskCategory" ng-model="newTaskCategory" ng-options="obj.name for obj in categories">
+                <option class="disabled" value="">Choose a category</option>
+              </select>
+              <label for="category">Category</label>
+            </div>
+
+            <div class="inputContainer half last right">
+              <input type="date" id="dueDate" class="taskDate" ng-model="newTaskDate">
+              <label for="dueDate">Due Date</label>
+            </div>
+
+            <div class="row">
+              <button class="btn btn-success" ng-click="addNew()">
+                <i class="fa fa-plus icon"></i>
+                Add task
+              </button>
+              <button class="btn btn-danger" ng-click="deleteTask()">
+                <i class="fa fa-trash-o icon"></i>
+                Delete Tasks
+              </button>
+            </div>
+
+          <!-- </form> -->
+
+          <ul  class="taskList">
+
+            <li class="taskItem" ng-repeat="taskItem in taskItem track by $index" ng-model="taskItem">
+              <input type="checkbox" class="taskCheckbox" ng-model="taskItem.complete" ng-change="save()">
+              <span class="complete-{{taskItem.complete}}">{{taskItem.description}}</span>
+              <span class="category-{{taskItem.category}}">{{taskItem.category}}</span>
+              <strong class="taskDate complete-{{taskItem.complete}}">
+                <i class="fa fa-calendar"></i>
+                {{taskItem.date | date : 'mediumDate'}}
+              </strong>
+              </li>
+          </ul>
+          <!-- taskList -->
+        </div>
+        <!-- content -->
+      </div>
+      <!-- container -->
+    </div>
+
+
+
+
+    <script src="https://unpkg.com/vue"></script>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/assets/javascript.js"></script>
+    <script src="/assets/app.js"></script>
+
+
+  </body>
+</html>
