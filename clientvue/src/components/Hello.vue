@@ -4,16 +4,16 @@
     <h1><strong>{{ msg }}</strong></h1>
     <!-- FB DATA AREA -->
       <img :src="profpic" class="img-responsive img-circle center-block" alt="">
-      <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h1>Welcome : {{username}}</h1></legend>
+      <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h2>Welcome : {{username}}</h2></legend>
       <!-- FACEBOOK LOGIN AREA -->
 
       <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
       <!-- <div id="fb-root"> -->
-      <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div><br>
+      <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" onlogin='location.reload()'></div><br>
       <!-- </div> -->
     </div>
 
-    <Todo/>
+    <Todo :login="isLogin" @clicked="emitGet"></Todo>
 
 
     <!-- TO DO AREA -->
@@ -84,7 +84,7 @@ export default {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
         .then(response => {
-          alert('sukses login')
+          // alert('sukses login')
           self.isLogin = true
           console.log('data dari server', response.data)
           this.profpic = response.data.picture.data.url
@@ -103,6 +103,10 @@ export default {
         self.isLogin = false
         location.reload()
       })
+    },
+    emitGet (value) {
+      alert(value)
+      console.log(value)
     }
   }
 }
@@ -112,11 +116,11 @@ export default {
 <style scoped>
 
 body {
-  background-image: url("/static/1.jpg");
+  /*background-image: url("/static/1.jpg");*/
 }
 
 h1, h2 {
-  font-size:20px;
+  /*font-size:20px;*/
   font-weight: normal;
 }
 
