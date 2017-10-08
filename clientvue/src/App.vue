@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="imgvue">
-      <img src="./assets/logo.png" >
+      <img src="./assets/logo.png" width="10%">
     </div>
     <router-view></router-view>
   </div>

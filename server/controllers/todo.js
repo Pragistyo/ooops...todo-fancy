@@ -1,13 +1,13 @@
 // const mongoose = require('mongoose');
 const todo     = require('../models/todo');
 
-
+console.log('==== todo controller')
 
 class TodoController{
 
   static allData(req,res){
 
-      todo.find({}).then(result=>{
+      todo.find({}).sort({date:'ascending'}).then(result=>{
         res.send(result)
       })
       .catch(err=>{
@@ -45,7 +45,16 @@ class TodoController{
   }
 
   static updateData(req,res){
-
+    console.log('============ masuk update');
+    todo.findOneAndUpdate({_id:req.params.id},{
+      complete: req.body.complete
+    })
+    .then(result=>{
+      res.send(result)
+    })
+    .catch(err=>{
+      res.send(err)
+    })
   }
 
   static deleteData(req,res){

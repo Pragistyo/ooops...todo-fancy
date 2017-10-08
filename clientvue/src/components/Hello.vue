@@ -4,7 +4,7 @@
     <h1><strong>{{ msg }}</strong></h1>
     <!-- FB DATA AREA -->
       <img :src="profpic" class="img-responsive img-circle center-block" alt="">
-      <legend v-if="isLogin" style="color:gold; font-family: Comic Sans MS"><h1>Welcome : {{username}}</h1></legend>
+      <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h1>Welcome : {{username}}</h1></legend>
       <!-- FACEBOOK LOGIN AREA -->
 
       <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
@@ -71,6 +71,7 @@ export default {
       console.log(response)
       if (response.status === 'connected') {
         localStorage.setItem('fb_access_token', response.authResponse.accessToken)
+        // location.reload()
         this.testAPI()
       } else {
         document.getElementById('status').innerHTML = 'Please log in'
@@ -89,17 +90,17 @@ export default {
           this.profpic = response.data.picture.data.url
           this.username = response.data.name
           localStorage.setItem('userId', response.data.id)
-          console.log('=== ', typeof response.data.id)
+          console.log('=== ', response.data.picture.data.url)
         })
         .catch(err => {
           console.log(err)
         })
     },
     logoutfb () {
+      var self = this
       window.FB.logout(function (response) {
-        var self = this
-        // localStorage.clear()
-        self.isLogin = true
+        localStorage.clear()
+        self.isLogin = false
         location.reload()
       })
     }
@@ -115,6 +116,7 @@ body {
 }
 
 h1, h2 {
+  font-size:20px;
   font-weight: normal;
 }
 

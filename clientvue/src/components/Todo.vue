@@ -9,7 +9,7 @@
           <div class="form-group">
             <label for="inputDescription" class="col-lg-2 control-label" style="color:teal; font-size:24px; padding-bottom:0px;">DESCRIPTION</label><br>
             <div class="col-lg-12">
-              <input type="text" class="form-control" id="inputDescription" placeholder="What do you want to do?" v-model="description">
+              <input type="text" class="form-control" id="inputDescription" placeholder="What do you want to do?" v-model="description" required>
             </div>
           </div>
 
@@ -18,7 +18,7 @@
             <label for="kategori" class="col-lg-2 control-label" style="color:teal; font-size:24px">CATEGORY</label>
             <div class="col-lg-12">
 
-              <select v-model="category" id="milih">
+              <select v-model="category" id="milih" required>
                   <option v-for="(categ, index) in categories">{{ categ.name }}</option>
               </select>
 
@@ -29,7 +29,7 @@
           <div class="form-group">
             <label for="tanggal" class="col-lg-1 control-label"style="color:teal; font-size:24px" >Due Date</label>
             <div class="col-lg-12">
-              <input type="date" id="tanggal" v-model="date">
+              <input type="date" id="tanggal" v-model="date" required>
             </div>
           </div>
 
@@ -40,10 +40,10 @@
                 <i class="fa fa-plus icon"></i>
                 Add
               </button>
-              <button type="submit" class="btn btn-danger" v-on:click="deleteTodo()">
+              <!-- <button type="submit" class="btn btn-danger" v-on:click="deleteTodo()">
                 <i class="fa fa-trash-o icon"></i>
                 delete
-              </button>
+              </button> -->
             </div>
           </div>
 
@@ -55,16 +55,22 @@
             </div>
             <div class="col-lg-12">
               <div class="radio" v-for="(item,index) in todo">
-                <label>
-                  <input type="checkbox"  name="optionsRadios" id="optionsRadios1" v-model="complete">
-                  <font size="30px">
-                     {{item.description}}, CATEGORY : {{item.categories[0]}}
-                  </font><br>
-                  <div class="text-center" style="size:90px">
+                <!-- <label> -->
+                  <input type="checkbox"  name="optionsRadios" id="optionsRadios1" v-model="item.complete" @change="updateTodo(item._id,item.complete)" style="text-center">
+                  <div class="" style="color:gold;">
+                    <strong>
+                    {{item.description}}, CATEGORY : {{item.categories}}
+                  <!-- <div class="text-center" style="size:90px"> -->
                     <i class="fa fa-calendar"></i>
                     {{item.date}}
-                  </div>
-                </label>
+                  </strong>
+                  <button type="submit" class="btn btn-danger" v-on:click="deleteTodo(item._id)">
+                    <i class="fa fa-trash-o icon"></i>
+                    delete
+                  </button>
+                </div>
+                  <!-- </div> -->
+                <!-- </label> -->
               </div>
             </div>
           </div>
@@ -74,8 +80,6 @@
     </div>
     </div>
   </div>
-
-
 
 </template>
 
@@ -103,13 +107,17 @@ export default {
   methods: {
     getData () {
       var self = this
-      // alert('yuhuuuuuuu', localStorage.userId)
-      // console.log('=============' + localStorage.userId)
       axios.get(`http://localhost:3000/todo/${localStorage.userId}`).then(result => {
+        // localStorage.setItem('taskItems', JSON.stringify(result.data))
         self.todo = result.data
         console.log(result.data)
         console.log('=====')
-        console.log(result)
+        console.log('+++++')
+        console.log(self.todo)
+        console.log(localStorage.taskItems)
+      })
+      .catch(err => {
+        console.log(err)
       })
     },
     addNew () {
@@ -123,9 +131,9 @@ export default {
       })
       console.log('==========', self.todo)
       alert(JSON.stringify(self.todo))
-      localStorage.setItem('taskItems', JSON.stringify(self.todo))
+      // localStorage.setItem('taskItems', JSON.stringify(self.todo))
       axios.post('http://localhost:3000/todo', {
-        description: self.description.toUppercase(),
+        description: self.description,
         categories: self.category,
         date: self.date,
         complete: false,
@@ -139,10 +147,30 @@ export default {
         alert('Error adding todo')
       })
     },
-    updateTodo () {
+    updateTodo (idTodo, status) {
+      var self = this
+      axios.put(`http://localhost:3000/todo/${idTodo}`, {
+        complete: status
+      })
+      .then(result => {
+        // alert(idTodo)
+        // alert(result)
+        alert(JSON.stringify(self.todo))
+        alert('Your todo updated')
+      })
     },
-    deleteTodo () {
-      alert(localStorage.taskItems)
+    deleteTodo (idTodo) {
+      // var self = this
+      axios.delete(`http://localhost:3000/todo/${idTodo}`)
+      .then(result => {
+        alert('Success delete your todo')
+        // window.location.href = 'index.html'
+      })
+      .catch(err => {
+        alert('Error delete your todo')
+        console.log(err)
+      })
+      // alert(localStorage.taskItems)
     }
   }
 }
@@ -179,6 +207,6 @@ export default {
 
 .fa-calendar {
   margin-right: 10px;
-  font-size: 26px;
+  font-size: 24px;
 }
 </style>
