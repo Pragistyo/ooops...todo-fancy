@@ -9,13 +9,13 @@
 
       <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
       <!-- <div id="fb-root"> -->
-      <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false" onlogin='location.reload()'></div><br>
+      <button v-if="!isLogin" v-on:click="loginfb()" data-size="large"  class="fb-login-button">Continue with Facebook</button>
+      <!-- <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"  ></div><br> -->
       <!-- </div> -->
     </div>
-
-    <Todo :login="isLogin" @clicked="emitGet"></Todo>
-
-
+    <h2 v-if="!isLogin" class="text-center">To Continue please login </h2>
+    <Todo v-if="isLogin" :login="isLogin" :username="username" :profpic="profpic" @clicked="emitGet" :userid="userid"></Todo>
+    <!-- <Todo v-if="!isLogin":login="isLogin" @clicked="emitGet" :userid="userid"></Todo> -->
     <!-- TO DO AREA -->
 
   </div>
@@ -31,6 +31,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to Vue.js Todo App',
+      userid: null,
       username: null,
       profpic: null,
       isLogin: false
@@ -51,7 +52,7 @@ export default {
       fjs.parentNode.insertBefore(js, fjs)
     }(document, 'script', 'facebook-jssdk'))
     // FB init
-    var self = this
+    // var self = this
     window.fbAsyncInit = function () {
       window.FB.init({
         appId: '119308148780939', // id fbApp
@@ -60,10 +61,11 @@ export default {
         xfbml: true,  // parse social plugins on this page
         version: 'v2.8' // use graph api version 2.8
       })
-      window.FB.getLoginStatus(function (response) {
-        self.statusChangeCallback(response)
-      })
+      // window.FB.getLoginStatus(function (response) {
+      //   self.statusChangeCallback(response)
+      // })
     }
+    // alert(this.username)
   },
   methods: {
     statusChangeCallback (response) {
@@ -71,26 +73,42 @@ export default {
       console.log(response)
       if (response.status === 'connected') {
         localStorage.setItem('fb_access_token', response.authResponse.accessToken)
-        // location.reload()
         this.testAPI()
       } else {
         document.getElementById('status').innerHTML = 'Please log in'
       }
     },
+    loginfb () {
+      alert('loginfb')
+      window.FB.login(response => {
+        console.log('statusChangeCallback')
+        console.log(response)
+        if (response.status === 'connected') {
+          localStorage.setItem('fb_access_token', response.authResponse.accessToken)
+          this.testAPI()
+        } else {
+          alert('Please login')
+        }
+      })
+    },
     testAPI () {
-      var self = this
       console.log('Welcome!  Fetching your information.... ')
       axios.get('http://localhost:3000/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
         .then(response => {
-          // alert('sukses login')
-          self.isLogin = true
+          this.userid = response.data.id
           console.log('data dari server', response.data)
           this.profpic = response.data.picture.data.url
           this.username = response.data.name
-          localStorage.setItem('userId', response.data.id)
+          localStorage.setItem('userId', this.userid)
+          localStorage.setItem('profpic', this.profpic)
+          localStorage.setItem('username', this.username)
+          console.log('+++++++++++', this.userid)
           console.log('=== ', response.data.picture.data.url)
+          this.isLogin = true
+          alert(this.username + ' Welcome !')
+          this.$router.push('/todo')
         })
         .catch(err => {
           console.log(err)
@@ -101,7 +119,9 @@ export default {
       window.FB.logout(function (response) {
         localStorage.clear()
         self.isLogin = false
-        location.reload()
+        this.$router.push('/')
+        alert(this.username)
+        // location.reload()
       })
     },
     emitGet (value) {

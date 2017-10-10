@@ -26,7 +26,7 @@ export default {
   text-align: center;
 }
 body {
-  background: linear-gradient(-45deg,#23A6D5, #23D5AB);
-  /*background-image: url("/static/1.jpg");*/
+  /*background: linear-gradient(-45deg,#23A6D5, #23D5AB);*/
+  background-image: url("/static/1.jpg");
 }
 </style>

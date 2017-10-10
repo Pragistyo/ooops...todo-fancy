@@ -1,15 +1,20 @@
 <template lang="html">
 
+
     <div class="container">
       <div class="row">
       <div class="col-md-8 col-md-offset-2">
       <form class="form-horizontal">
         <fieldset>
+          <img :src="profpic" class="img-responsive img-circle center-block" alt=""><br>
+          <button href="#"class="btn btn-primary center-block" @click="logoutfb()" name="button">logout</button>
+          <legend style="color:silver; font-family: Comic Sans MS" class="text-center"><h2>Welcome : {{username}}</h2></legend>
           <!-- <legend>Legend</legend> -->
+          <!-- <button type="button" name="button" @click="test()">test</button> -->
           <div class="form-group">
             <label for="inputDescription" class="col-lg-2 control-label" style="color:silver; font-size:24px; padding-bottom:0px;">DESCRIPTION</label><br>
             <div class="col-lg-12">
-              <input type="text" class="form-control" id="inputDescription" placeholder="What do you want to do?" v-model="description" required>
+              <input type="text" class="form-control" id="inputDescription" placeholder="What do you want to do?" v-model="description" >
             </div>
           </div>
 
@@ -20,8 +25,7 @@
             </label>
             <div class="col-lg-12">
 
-              <select v-model="category" id="milih" required>
-                  <option value="Why not add Description?" selected>Choose Category</option>
+              <select v-model="category" id="milih" >
                   <option v-for="(categ, index) in categories">{{ categ.name }}</option>
               </select>
 
@@ -34,7 +38,7 @@
               DUEDATE
             </label>
             <div class="col-lg-12">
-              <input type="date" id="tanggal" v-model="date" required>
+              <input type="date" id="tanggal" v-model="date" >
             </div>
           </div>
 
@@ -61,7 +65,7 @@
             <div class="col-lg-12">
               <div class="radio" v-for="(item,index) in todo">
                 <!-- <label> -->
-                  <input type="checkbox"  name="optionsRadios" id="optionsRadios1" v-model="item.complete" @change="updateTodo(item._id,item.complete)" style="text-center">
+                  <input type="checkbox"  name="optionsRadios" id="optionsRadios1" v-model="item.complete" @change="updateTodo(item._id,item.complete,index)" style="text-center">
                   <div class="" style="color:gold;">
                     <strong>
                     {{item.description}}, CATEGORY : {{item.categories}}
@@ -70,11 +74,11 @@
                     {{item.date}}
                     <!-- <p>{{item._id}}</p> -->
                   </strong>
-                  <button type="submit" class="btn btn-danger" @click="deleteTodo(item._id)">
+                  <button type="submit" class="btn btn-danger" @click="deleteTodo(item._id,index)">
                     <i class="fa fa-trash-o icon"></i>
                     delete
                   </button>
-                  <p>{{login}}</p>
+                  <!-- <p>{{login}}</p> -->
                 </div>
                   <!-- </div> -->
                 <!-- </label> -->
@@ -93,7 +97,7 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['login'],
+  props: ['login', 'userid'],
   data () {
     return {
       ogi: 'hahahah',
@@ -102,6 +106,8 @@ export default {
       date: null,
       complete: false,
       todo: [],
+      profpic: null,
+      username: null,
       categories: [
         {name: 'Personal'},
         {name: 'Work'},
@@ -110,12 +116,26 @@ export default {
       ]
     }
   },
-  created: function () {
-    this.getData()
+  watch: {
+    // whenever question changes, this function will run
+    login: function (newQuestion) {
+      this.answer = true
+      // this.getAnswer()
+    }
+  },
+  mounted: function () {
+    if (!localStorage.getItem('userId')) {
+      this.$router.push('/')
+    } else {
+      this.getData()
+      this.profpic = localStorage.profpic
+      this.username = localStorage.username
+    }
   },
   methods: {
     getData () {
       var self = this
+      // alert('===========')
       axios.get(`http://localhost:3000/todo/${localStorage.userId}`).then(result => {
         // alert(JSON.stringify(result.data))
         // localStorage.setItem('taskItems', JSON.stringify(result.data))
@@ -134,18 +154,12 @@ export default {
       var self = this
       if (self.description === null || self.category === null || self.date === null) {
         alert('Please fill of all your todo data')
-      } else if (!this.login) {
-        alert('Please login')
+      // }
+      // else if (!this.login) {
+      //   alert('Please login')
       } else {
-        self.todo.push({
-          description: self.description,
-          category: self.category,
-          date: self.date,
-          complete: false,
-          userId: localStorage.userId
-        })
-        console.log('==========', self.todo)
-        alert(JSON.stringify(self.todo))
+        // console.log('==========', self.todo)
+        // alert(JSON.stringify(self.todo))
         axios.post('http://localhost:3000/todo', {
           description: self.description,
           categories: self.category,
@@ -154,9 +168,12 @@ export default {
           userId: localStorage.userId
         })
         .then(result => {
-          // alert(JSON.stringify(result.data))
-          location.reload()
+          self.todo.push(result.data)
           alert('You add a todo list')
+          // alert(JSON.stringify(self.todo[self.todo.length - 1]))
+          // self.description = null
+          // self.category = null
+          // self.date = null
         })
         .catch(err => {
           console.log(err)
@@ -164,37 +181,48 @@ export default {
         })
       }
     },
-    updateTodo (idTodo, status) {
-      var self = this
+    updateTodo (idTodo, status, index) {
+      // var self = this
       axios.put(`http://localhost:3000/todo/${idTodo}`, {
         complete: status
       })
       .then(result => {
+        // this.todo[index].complete = status
         // alert(idTodo)
         // alert(result)
-        alert(JSON.stringify(self.todo))
+        // alert(JSON.stringify(self.todo))
         alert('Your todo updated')
       })
     },
-    deleteTodo (idTodo) {
-      alert(this.login)
-      // var self = this
+    deleteTodo (idTodo, index) {
+      // alert(this.login)
+      var self = this
       alert(idTodo)
       axios.delete(`http://localhost:3000/todo/${idTodo}`)
       .then(result => {
-        location.reload()
+        self.todo.splice(index, 1)
         alert('Success delete your todo')
-        // window.location.href = 'index.html'
       })
       .catch(err => {
         alert('Error delete your todo')
         console.log(err)
       })
-      // alert(localStorage.taskItems)
     },
     onClickButton (event) {
       this.$emit('clicked', 'ogitampan')
-      // alert('ogitampan')
+    },
+    logoutfb () {
+      // alert(this.username)
+      var self = this
+      // window.FB.logout(function (response) {
+      localStorage.clear()
+      self.isLogin = false
+      this.$router.push('/')
+        // location.reload()
+      // })
+    },
+    test () {
+      alert(this.login)
     }
   }
 }
