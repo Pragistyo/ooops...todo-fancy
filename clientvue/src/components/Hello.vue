@@ -9,12 +9,12 @@
 
       <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
       <!-- <div id="fb-root"> -->
-      <button v-if="!isLogin" v-on:click="loginfb()" data-size="large"  class="fb-login-button">Continue with Facebook</button>
+      <button v-if="!isLogin" v-on:click="loginfb()">Continue with Facebook</button>
       <!-- <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"  ></div><br> -->
       <!-- </div> -->
     </div>
     <h2 v-if="!isLogin" class="text-center">To Continue please login </h2>
-    <Todo v-if="isLogin" :login="isLogin" :username="username" :profpic="profpic" @clicked="emitGet" :userid="userid"></Todo>
+    <Todo v-if="isLogin" :login="isLogin"  :profpic="profpic" @clicked="emitGet" :userid="userid"></Todo>
     <!-- <Todo v-if="!isLogin":login="isLogin" @clicked="emitGet" :userid="userid"></Todo> -->
     <!-- TO DO AREA -->
 
@@ -33,6 +33,7 @@ export default {
       msg: 'Welcome to Vue.js Todo App',
       userid: null,
       username: null,
+      // usergue: 'ogi',
       profpic: null,
       isLogin: false
     }
@@ -79,7 +80,6 @@ export default {
       }
     },
     loginfb () {
-      alert('loginfb')
       window.FB.login(response => {
         console.log('statusChangeCallback')
         console.log(response)
@@ -93,6 +93,7 @@ export default {
     },
     testAPI () {
       console.log('Welcome!  Fetching your information.... ')
+      alert('loginfb')
       axios.get('http://localhost:3000/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
@@ -104,6 +105,7 @@ export default {
           localStorage.setItem('userId', this.userid)
           localStorage.setItem('profpic', this.profpic)
           localStorage.setItem('username', this.username)
+          this.usergue = localStorage.setItem('username', this.username)
           console.log('+++++++++++', this.userid)
           console.log('=== ', response.data.picture.data.url)
           this.isLogin = true

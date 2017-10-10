@@ -7,8 +7,9 @@
       <form class="form-horizontal">
         <fieldset>
           <img :src="profpic" class="img-responsive img-circle center-block" alt=""><br>
-          <button href="#"class="btn btn-primary center-block" @click="logoutfb()" name="button">logout</button>
+          <button href="#" class="fb-login-button  center-block" @click="logoutfb()" name="button">logout</button>
           <legend style="color:silver; font-family: Comic Sans MS" class="text-center"><h2>Welcome : {{username}}</h2></legend>
+          <p> BLABLA</p>
           <!-- <legend>Legend</legend> -->
           <!-- <button type="button" name="button" @click="test()">test</button> -->
           <div class="form-group">
@@ -124,6 +125,7 @@ export default {
     }
   },
   mounted: function () {
+    // alert(localStorage.username)
     if (!localStorage.getItem('userId')) {
       this.$router.push('/')
     } else {
@@ -220,9 +222,6 @@ export default {
       this.$router.push('/')
         // location.reload()
       // })
-    },
-    test () {
-      alert(this.login)
     }
   }
 }
