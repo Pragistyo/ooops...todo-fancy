@@ -26,6 +26,7 @@
             <div class="col-lg-12">
 
               <select v-model="category" id="milih" >
+                <option value="" selected="">Choose Category</option>
                   <option v-for="(categ, index) in categories">{{ categ.name }}</option>
               </select>
 
@@ -97,7 +98,7 @@
 <script>
 import axios from 'axios'
 export default {
-  props: ['login', 'userid'],
+  props: ['login', 'userid', 'username'],
   data () {
     return {
       ogi: 'hahahah',

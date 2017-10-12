@@ -6,7 +6,6 @@
       <img :src="profpic" class="img-responsive img-circle center-block" alt="">
       <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h2>Welcome : {{username}}</h2></legend>
       <!-- FACEBOOK LOGIN AREA -->
-
       <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
       <!-- <div id="fb-root"> -->
       <button v-if="!isLogin" v-on:click="loginfb()">Continue with Facebook</button>
@@ -14,7 +13,7 @@
       <!-- </div> -->
     </div>
     <h2 v-if="!isLogin" class="text-center">To Continue please login </h2>
-    <Todo v-if="isLogin" :login="isLogin"  :profpic="profpic" @clicked="emitGet" :userid="userid"></Todo>
+    <Todo v-if="isLogin" :login="isLogin"  :username="username" @clicked="emitGet" :userid="userid"></Todo>
     <!-- <Todo v-if="!isLogin":login="isLogin" @clicked="emitGet" :userid="userid"></Todo> -->
     <!-- TO DO AREA -->
 
