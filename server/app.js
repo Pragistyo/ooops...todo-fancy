@@ -30,6 +30,6 @@ app.use('/login',login)
 app.use('/todo',todo)
 
 
-app.listen(3000,()=>{
+app.listen(process.env.PORT || 3000,()=>{
   console.log('Port 3000, Ready !');
 })
