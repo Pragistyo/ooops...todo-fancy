@@ -16,7 +16,6 @@
     <Todo v-if="isLogin" :login="isLogin"  :username="username" @clicked="emitGet" :userid="userid"></Todo>
     <!-- <Todo v-if="!isLogin":login="isLogin" @clicked="emitGet" :userid="userid"></Todo> -->
     <!-- TO DO AREA -->
-
   </div>
 </template>
 
@@ -93,7 +92,8 @@ export default {
     testAPI () {
       console.log('Welcome!  Fetching your information.... ')
       alert('loginfb')
-      axios.get('http://localhost:3000/login/fb', {
+      // axios.get('http://localhost:3000/login/fb', {
+      axios.get('http://35.197.157.222/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
         .then(response => {

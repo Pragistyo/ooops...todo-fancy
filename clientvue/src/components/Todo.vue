@@ -138,7 +138,9 @@ export default {
     getData () {
       var self = this
       // alert('===========')
-      axios.get(`http://localhost:3000/todo/${localStorage.userId}`).then(result => {
+      // axios.get(`http://localhost:3000/todo/${localStorage.userId}`).then(result => {
+      axios.get(`http://35.197.157.222/todo/${localStorage.userId}`).then(result => {
+        // axios.get('http://35.197.157.222/login/fb', {
         // alert(JSON.stringify(result.data))
         // localStorage.setItem('taskItems', JSON.stringify(result.data))
         self.todo = result.data
@@ -162,7 +164,7 @@ export default {
       } else {
         // console.log('==========', self.todo)
         // alert(JSON.stringify(self.todo))
-        axios.post('http://localhost:3000/todo', {
+        axios.post('http://35.197.157.222/todo', {
           description: self.description,
           categories: self.category,
           date: self.date,
@@ -185,7 +187,7 @@ export default {
     },
     updateTodo (idTodo, status, index) {
       // var self = this
-      axios.put(`http://localhost:3000/todo/${idTodo}`, {
+      axios.put(`http://35.197.157.222/todo/${idTodo}`, {
         complete: status
       })
       .then(result => {
@@ -200,7 +202,7 @@ export default {
       // alert(this.login)
       var self = this
       alert(idTodo)
-      axios.delete(`http://localhost:3000/todo/${idTodo}`)
+      axios.delete(`http://35.197.157.222/todo/${idTodo}`)
       .then(result => {
         self.todo.splice(index, 1)
         alert('Success delete your todo')
