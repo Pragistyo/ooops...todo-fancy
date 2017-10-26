@@ -1,20 +1,22 @@
 <template>
   <div class="hello">
     <div class="text-center">
-    <h1><strong>{{ msg }}</strong></h1>
+      <legend></legend>
+      <h1 style="color:dimgrey"><strong>{{ msg }}</strong></h1>
     <!-- FB DATA AREA -->
-      <img :src="profpic" class="img-responsive img-circle center-block" alt="">
-      <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h2>Welcome : {{username}}</h2></legend>
+      <!-- <img :src="profpic" class="img-responsive img-circle center-block" alt=""> -->
+      <!-- <legend v-if="isLogin" style="color:silver; font-family: Comic Sans MS"><h2>Welcome : {{username}}</h2></legend> -->
       <!-- FACEBOOK LOGIN AREA -->
-      <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br>
+      <!-- <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br> -->
       <!-- <div id="fb-root"> -->
-      <button v-if="!isLogin" v-on:click="loginfb()">Continue with Facebook</button>
+      <button v-if="!isLogin" v-on:click="loginfb()" class="btn btn-default" style="font-size:24px;font-family:gruppo">Continue with Facebook</button>
       <!-- <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"  ></div><br> -->
       <!-- </div> -->
     </div>
-    <h2 v-if="!isLogin" class="text-center">To Continue please login </h2>
+    <h2 v-if="!isLogin" class="text-center" style="color:dimgray">To Continue please login </h2>
+    <legend></legend>
     <Todo v-if="isLogin" :login="isLogin"  :username="username" @clicked="emitGet" :userid="userid"></Todo>
-    <!-- <Todo v-if="!isLogin":login="isLogin" @clicked="emitGet" :userid="userid"></Todo> -->
+    <Demo></Demo>
     <!-- TO DO AREA -->
   </div>
 </template>
@@ -22,6 +24,8 @@
 
 <script>
 import axios from 'axios'
+import swal from 'sweetalert'
+import Demo from '@/components/DemoTodo'
 import Todo from '@/components/Todo'
 // import FB from 'fb'
 export default {
@@ -37,7 +41,8 @@ export default {
     }
   },
   components: {
-    Todo
+    Todo,
+    Demo
   },
   mounted: function () {
     // FB SDK
@@ -91,7 +96,7 @@ export default {
     },
     testAPI () {
       console.log('Welcome!  Fetching your information.... ')
-      alert('loginfb')
+      // swal('Login With FB')
       // axios.get('http://localhost:3000/login/fb', {
       axios.get('http://35.197.157.222/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
@@ -108,7 +113,7 @@ export default {
           console.log('+++++++++++', this.userid)
           console.log('=== ', response.data.picture.data.url)
           this.isLogin = true
-          alert(this.username + ' Welcome !')
+          swal(this.username + ' Welcome !', '', 'success')
           this.$router.push('/todo')
         })
         .catch(err => {
@@ -137,18 +142,19 @@ export default {
 <style scoped>
 
 body {
-  /*background-image: url("/static/1.jpg");*/
+  background-image: url("/static/1.jpg");
 }
 
 h1, h2 {
-  /*font-size:20px;*/
+  /* color: MediumSeaGreen   ; */
   font-weight: normal;
+  text-shadow: 2px 1px 7px black;
 }
 
 .text-center {
   font-weight: normal;
-  /*font-family: sans-serif;
-  text-align: center;*/
+  font-family: sans-serif;
+  text-align: center;
 }
 
 ul {
@@ -165,3 +171,4 @@ a {
   color: #42b983;
 }
 </style>
+
