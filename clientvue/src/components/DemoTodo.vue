@@ -79,17 +79,18 @@
 
         <div class="row">
             <!-- CATEGORY -->
-            <div class="form-group col-lg-6">
+            <div class="form-group col-sm-6">
                 <label 
                 for="kategori" 
-                class="col-lg-2 control-label" 
+                class="col-sm-2 control-label" 
                 style="color:silver; font-size:30px; font-family:gruppo;">
                 CATEGORY
                 </label>
-                <div class="col-lg-12">
+                <div class="col-sm-12">
 
                 <select 
-                v-model="category" 
+                v-model="category"
+                class="form-control"
                 id="milih" 
                 style="border-radius:15px;">
                     <!-- <option value="audi" selected>Audi</option> -->
@@ -104,20 +105,21 @@
             </div>
 
             <!-- DUE DATE -->
-            <div class="form-group col-lg-6 somethingDueDate">
-                <div class="col-lg-12">
+            <div class="form-group col-sm-6 somethingDueDate">
+                <div class="col-sm-12">
                     <label 
                     for="tanggal" 
-                    class="col-lg-12 control-label"
+                    class="col-sm-12 control-label"
                     style="color:silver; font-size:30px; font-family:gruppo;" >
                     DUEDATE
                     </label>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-sm-12">
                     <input 
                     type="date" 
                     id="tanggal" 
-                    v-model="date" 
+                    v-model="date"
+                    class="form-control somethingDueDate"
                     style="border-radius:15px; font-size:26px; font-family:gruppo;">
                 </div>
             </div>
@@ -275,16 +277,6 @@ export default {
     font-size: 24px;
     font-weight: 500;
 }
-
-.taskList .taskDate {
-  color: #95a5a6;
-  font-size: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  display: block;
-  margin-left: 41px;
-}
-
 .fa-calendar {
   margin-right: 10px;
   font-size: 16px;
@@ -316,8 +308,10 @@ export default {
 .calender {
     font-size: 26px;
 }
-.somethingDueDate {
-    /* text-align: right; */
-    /* float: right; */
+@media (min-width: 700px) {
+  .somethingDueDate {
+      text-align: right;
+      float: right;
+  }
 }
 </style>

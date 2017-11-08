@@ -4,9 +4,9 @@
       <img src="./assets/logo.png">
     </div>
     <router-view ></router-view>
-    <div class="footer">
+    <footer class="footer">
         <h3 class="text-center">@copyright: pragistyo.github.io</h3>
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -30,11 +30,13 @@ export default {
 }
 body {
   /*background: linear-gradient(-45deg,#23A6D5, #23D5AB);*/
-  /* background-image: url("/static/1.jpg"); */
+  background-image: url("/static/1.jpg");
+  /* background-image: url("/static/canvas1.jpg"); */
   /* background-image: url("/static/Canvas.jpg"); */
+  width: 100%;
   height:100%;
 }
-.footer {
+footer {
   color: silver;
   font-family: gruppo;
   background: darkslategray;
@@ -43,7 +45,5 @@ body {
   height:100%;
   width: 100%;
 }
-html {
-  height:100%;
-}
+
 </style>

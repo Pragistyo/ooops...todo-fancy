@@ -8,11 +8,11 @@ router.get('/', login.allData);
 router.post('/', login.postData);
 // router.get('/:id', login.singleData);
 // router.put('/:id', login.updateData);
-// router.delete('/:id', login.deleteData);
+router.delete('/:id', login.deleteData);
 
-//endpoint login fb, setelah login, di html di redirect ke halaman todo
-//di html todo, check token dulu
-console.log('=========');
+// console.log('=========');
 router.get('/fb', login.setFBAccessToken, login.getUserFB)
+router.get('/verify', login.getJwt)
+
 
 module.exports = router

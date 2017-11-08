@@ -15,7 +15,13 @@
     </div>
     <h2 v-if="!isLogin" class="text-center" style="color:dimgray">To Continue please login </h2>
     <legend></legend>
-    <Todo v-if="isLogin" :login="isLogin"  :username="username" @clicked="emitGet" :userid="userid"></Todo>
+    <Todo 
+      v-if="isLogin" 
+      :login="isLogin"  
+      :username="username" 
+      @clicked="emitGet" 
+      :userid="userid">
+    </Todo>
     <Demo></Demo>
     <!-- TO DO AREA -->
   </div>
@@ -69,7 +75,6 @@ export default {
       //   self.statusChangeCallback(response)
       // })
     }
-    // alert(this.username)
   },
   methods: {
     statusChangeCallback (response) {
@@ -90,31 +95,26 @@ export default {
           localStorage.setItem('fb_access_token', response.authResponse.accessToken)
           this.testAPI()
         } else {
-          alert('Please login')
+          swal('Please login', '', 'error')
         }
-      })
+      }, {scope: 'email, public_profile', return_scopes: true})
     },
     testAPI () {
       console.log('Welcome!  Fetching your information.... ')
-      // swal('Login With FB')
-      // axios.get('http://localhost:3000/login/fb', {
-      axios.get('http://35.197.157.222/login/fb', {
+      // axios.get('http://35.197.157.222/login/fb', {
+      axios.get('http://localhost:3000/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
         .then(response => {
-          this.userid = response.data.id
-          console.log('data dari server', response.data)
-          this.profpic = response.data.picture.data.url
-          this.username = response.data.name
-          localStorage.setItem('userId', this.userid)
-          localStorage.setItem('profpic', this.profpic)
-          localStorage.setItem('username', this.username)
-          this.usergue = localStorage.setItem('username', this.username)
-          console.log('+++++++++++', this.userid)
-          console.log('=== ', response.data.picture.data.url)
-          this.isLogin = true
-          swal(this.username + ' Welcome !', '', 'success')
-          this.$router.push('/todo')
+          // console.log('=======', response)
+          // alert(JSON.stringify(response))
+          localStorage.setItem('token', response.data.thisToken)
+          this.username = response.data.dataFB.username
+          if (response.data.dataFB.username) {
+            this.isLogin = true
+            swal(this.username + ' Welcome !', '', 'success')
+            this.$router.push('/todo')
+          }
         })
         .catch(err => {
           console.log(err)
@@ -127,7 +127,6 @@ export default {
         self.isLogin = false
         this.$router.push('/')
         alert(this.username)
-        // location.reload()
       })
     },
     emitGet (value) {

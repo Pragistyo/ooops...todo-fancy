@@ -146,6 +146,7 @@
         </fieldset>
       </form>
     </div>
+    <!-- <button></button> -->
     </div>
   </div>
 
@@ -159,6 +160,7 @@ export default {
   data () {
     return {
       ogi: 'hahahah',
+      userId: null,
       description: null,
       category: null,
       date: null,
@@ -183,31 +185,38 @@ export default {
   },
   mounted: function () {
     // this.fbSDK()
-    if (!localStorage.getItem('userId')) {
+    if (!localStorage.getItem('token')) {
       this.$router.push('/')
     } else {
+      this.getUser()
       this.getData()
       this.profpic = localStorage.profpic
       this.username = localStorage.username
     }
   },
   methods: {
+    getUser () {
+      axios.get(`http://localhost:3000/login/verify`, {
+        headers: {token: localStorage.token}
+      })
+      .then(result => {
+        this.profpic = result.data.img
+        this.username = result.data.username
+        this.userId = result.data.userId
+      })
+    },
     getData () {
       var self = this
-      // axios.get(`http://localhost:3000/todo/${localStorage.userId}`).then(result => {
-      axios.get(`http://35.197.157.222/todo/${localStorage.userId}`).then(result => {
-        // axios.get('http://35.197.157.222/login/fb', {
-        // alert(JSON.stringify(result.data))
-        // localStorage.setItem('taskItems', JSON.stringify(result.data))
-        self.todo = result.data
-        console.log(result.data)
-        console.log('=====')
-        console.log('+++++')
-        console.log(self.todo)
-        console.log(localStorage.taskItems)
+      axios.get(`http://localhost:3000/login/verify`, {
+        headers: {token: localStorage.token}
       })
-      .catch(err => {
-        console.log(err)
+      .then(result => {
+        axios.get(`http://35.197.157.222/todo/${result.data.userId}`).then(result => {
+          self.todo = result.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
       })
     },
     addNew () {
@@ -215,16 +224,15 @@ export default {
       if (self.description === null || self.category === null || self.date === null) {
         swal('Please fill of all your todo data', '', 'warning')
       } else {
-        // console.log('==========', self.todo)
-        // alert(JSON.stringify(self.todo))
         axios.post('http://35.197.157.222/todo', {
           description: self.description,
           categories: self.category,
           date: self.date,
           complete: false,
-          userId: localStorage.userId
+          userId: self.userId
         })
         .then(result => {
+          // alert(result.data)
           self.todo.push(result.data)
           swal('You add a todo list', '', 'success')
           // alert(JSON.stringify(self.todo[self.todo.length - 1]))
@@ -243,42 +251,34 @@ export default {
         complete: status
       })
       .then(result => {
-        // this.cssChekbox(status)
         swal('Your todo updated', '', 'success')
       })
     },
     deleteTodo (idTodo, index) {
       var self = this
-      alert(idTodo)
+      // alert(idTodo)
       axios.delete(`http://35.197.157.222/todo/${idTodo}`)
       .then(result => {
         self.todo.splice(index, 1)
-        alert('Success delete your todo')
+        swal('Success delete your todo', '', 'success')
       })
       .catch(err => {
-        alert('Error delete your todo')
+        swal('Error delete your todo', '', 'error')
         console.log(err)
       })
-    },
-    cssChekbox (status) {
-      if (status === true) {
-        return 'somehting-true'
-      } else {
-        return 'else'
-      }
     },
     onClickButton (event) {
       this.$emit('clicked', 'ogitampan')
     },
     logoutfb () {
       var self = this
-      // console.log('galih')
-      // window.FB.logout((response) => {
-      // })
       localStorage.clear()
       self.isLogin = false
       swal('You Logged Out form Application', '', 'info')
       this.$router.push('/')
+      // window.FB.logout((response) => {
+      //   alert('smth')
+      // })
     },
     fbSDK () {
       (function (d, s, id) {
@@ -300,7 +300,7 @@ export default {
           version: 'v2.8' // use graph api version 2.8
         })
       }
-    }
+    } // END OF fb SDK
   }
 }
 </script>
@@ -375,16 +375,6 @@ export default {
     font-weight: 500;
     width: 120px;
 }
-
-.taskList .taskDate {
-  color: #95a5a6;
-  font-size: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  display: block;
-  margin-left: 41px;
-}
-
 .fa-calendar {
   margin-right: 10px;
   font-size: 16px;
