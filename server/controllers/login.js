@@ -132,7 +132,7 @@ class LoginController{
     jwt.verify(req.headers.token, process.env.SECRET_KEY, (err, decoded) => {
       if (!err) {
         res.send(decoded)
-        next()
+        // next()
       }
       else {
         console.log(err)
