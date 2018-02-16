@@ -170,7 +170,6 @@ export default {
   },
   watch: {
     login: function (newQuestion) {
-      this.answer = true
     }
   },
   mounted: function () {

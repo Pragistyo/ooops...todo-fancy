@@ -156,7 +156,7 @@
 import axios from 'axios'
 import swal from 'sweetalert'
 export default {
-  props: ['login', 'userid', 'username'],
+  props: ['login', 'userid'],
   data () {
     return {
       ogi: 'hahahah',
@@ -177,11 +177,6 @@ export default {
     }
   },
   watch: {
-    // whenever question changes, this function will run
-    strikethrough: function (blablablablbalbalblablabla) {
-      this.answer = true
-      // this.getAnswer()
-    }
   },
   mounted: function () {
     // this.fbSDK()
@@ -190,13 +185,11 @@ export default {
     } else {
       this.getUser()
       this.getData()
-      this.profpic = localStorage.profpic
-      this.username = localStorage.username
     }
   },
   methods: {
     getUser () {
-      axios.get(`http://localhost:3000/login/verify`, {
+      axios.get(`http://35.197.157.222/login/verify`, {
         headers: {token: localStorage.token}
       })
       .then(result => {
@@ -207,7 +200,7 @@ export default {
     },
     getData () {
       var self = this
-      axios.get(`http://localhost:3000/login/verify`, {
+      axios.get(`http://35.197.157.222/login/verify`, {
         headers: {token: localStorage.token}
       })
       .then(result => {
@@ -320,7 +313,7 @@ export default {
     text-decoration: none;
     display: inline-block;
     font-size: 24px;
-    width: 100%;
+    width: 120px;
 }
 
 .Work { 

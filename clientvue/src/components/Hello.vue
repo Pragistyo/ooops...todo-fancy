@@ -10,8 +10,6 @@
       <!-- <button v-if="isLogin" v-on:click="logoutfb()" class="btn btn-info">logout</button><br> -->
       <!-- <div id="fb-root"> -->
       <button v-if="!isLogin" v-on:click="loginfb()" class="btn btn-default" style="font-size:24px;font-family:gruppo">Continue with Facebook</button>
-      <!-- <div v-if="!isLogin" class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"  ></div><br> -->
-      <!-- </div> -->
     </div>
     <h2 v-if="!isLogin" class="text-center" style="color:dimgray">To Continue please login </h2>
     <legend></legend>
@@ -23,7 +21,6 @@
       :userid="userid">
     </Todo>
     <Demo></Demo>
-    <!-- TO DO AREA -->
   </div>
 </template>
 
@@ -33,7 +30,6 @@ import axios from 'axios'
 import swal from 'sweetalert'
 import Demo from '@/components/DemoTodo'
 import Todo from '@/components/Todo'
-// import FB from 'fb'
 export default {
   name: 'hello',
   data () {
@@ -41,7 +37,6 @@ export default {
       msg: 'Welcome to Vue.js Todo App',
       userid: null,
       username: null,
-      // usergue: 'ogi',
       profpic: null,
       isLogin: false
     }
@@ -71,9 +66,6 @@ export default {
         xfbml: true,  // parse social plugins on this page
         version: 'v2.8' // use graph api version 2.8
       })
-      // window.FB.getLoginStatus(function (response) {
-      //   self.statusChangeCallback(response)
-      // })
     }
   },
   methods: {
@@ -101,8 +93,8 @@ export default {
     },
     testAPI () {
       console.log('Welcome!  Fetching your information.... ')
-      // axios.get('http://35.197.157.222/login/fb', {
-      axios.get('http://localhost:3000/login/fb', {
+      axios.get('http://35.197.157.222/login/fb', {
+      // axios.get('http://localhost:3000/login/fb', {
         headers: {fb_access_token: localStorage.getItem('fb_access_token')}
       })
         .then(response => {
